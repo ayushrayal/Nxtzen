@@ -1,0 +1,125 @@
+.product-card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--border-color);
+
+    .product-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.product-image-container {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background-color: #f7f7f7;
+
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-smooth);
+  }
+
+  &:hover .product-image {
+    transform: scale(1.08); /* slight zoom */
+  }
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+
+  span {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-family: var(--font-body);
+  }
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+
+  .product-title {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+
+  .product-price {
+    font-weight: 700;
+    color: var(--accent-color);
+  }
+}
+
+.product-desc {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .colors {
+    display: flex;
+    gap: 0.25rem;
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      
+      &.active {
+        border-color: var(--text-primary);
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .sizes {
+    display: flex;
+    gap: 0.25rem;
+
+    .size-badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.35rem;
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+  }
+}

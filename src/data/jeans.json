@@ -1,0 +1,36 @@
+[
+  {
+    "id": "J1",
+    "name": "NXTZEN Relaxed Denim Jeans",
+    "category": "Jeans",
+    "price": 89.99,
+    "description": "Premium relaxed-fit denim crafted for maximum comfort and an effortlessly modern aesthetic. Features subtle distressing.",
+    "sizes": ["28", "30", "32", "34", "36"],
+    "colors": {
+      "blue": [
+        "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1624378439575-d1ead6bb29d1?auto=format&fit=crop&w=800&q=80"
+      ],
+      "black": [
+        "https://images.unsplash.com/photo-1588099768531-a72d4a198538?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1605320508643-4a18cdcefc33?auto=format&fit=crop&w=800&q=80"
+      ]
+    }
+  },
+  {
+    "id": "J2",
+    "name": "NXTZEN Skinny Fit Indigo",
+    "category": "Jeans",
+    "price": 95.00,
+    "description": "Built from stretch-infused indigo denim, these skinny jeans seamlessly contour the body for a sharp, tailored form.",
+    "sizes": ["30", "32", "34", "36"],
+    "colors": {
+      "indigo": [
+        "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80"
+      ],
+      "gray": [
+        "https://images.unsplash.com/photo-1604176354204-9268738128ce?auto=format&fit=crop&w=800&q=80"
+      ]
+    }
+  }
+]

@@ -1,0 +1,38 @@
+.about-page {
+  padding-bottom: 4rem;
+}
+
+.about-hero {
+  background: var(--surface-color);
+  padding: 12rem 0 6rem;
+  margin-bottom: 4rem;
+  border-bottom: 1px solid var(--border-color);
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--text-primary);
+    max-width: 800px;
+  }
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-section {
+  h2 {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+}

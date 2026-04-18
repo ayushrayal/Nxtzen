@@ -1,0 +1,33 @@
+[
+  {
+    "id": "S1",
+    "name": "NXTZEN Classic Linen Shirt",
+    "category": "Shirts",
+    "price": 65.00,
+    "description": "A timeless linen shirt, perfect for layering. Breathable and woven to perfection, offering understated elegance.",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": {
+      "white": [
+        "https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80"
+      ],
+      "beige": [
+        "https://images.unsplash.com/photo-1588359348347-9bc6cbbb689e?auto=format&fit=crop&w=800&q=80"
+      ]
+    }
+  },
+  {
+    "id": "S2",
+    "name": "NXTZEN Monocolor Button-Up",
+    "category": "Shirts",
+    "price": 75.00,
+    "description": "Minimalist button-up designed for the contemporary urban traveler. Crease-resistant and endlessly versatile.",
+    "sizes": ["M", "L", "XL", "XXL"],
+    "colors": {
+      "black": [
+        "https://images.unsplash.com/photo-1602810319428-019690571b5b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1596755106190-67c87019808a?auto=format&fit=crop&w=800&q=80"
+      ]
+    }
+  }
+]
