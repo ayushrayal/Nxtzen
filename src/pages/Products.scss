@@ -1,35 +1,60 @@
 .products-page {
-  padding-top: 8rem; // accommodate fixed navbar
-  padding-bottom: 4rem;
+  padding-top: var(--page-top);
+  padding-bottom: var(--sp-16);
 }
 
+// ─── Header + filters block ───────────────────────────────────────────────────
 .products-header {
-  margin-bottom: 3rem;
-  
-  .page-title {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);   // gap between filters and grid
 }
 
+.page-title {
+  font-size: clamp(1.75rem, 4.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+// ─── Category filter pills ────────────────────────────────────────────────────
 .category-filters {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 8px;
   flex-wrap: wrap;
+}
 
-  .filter-btn {
-    padding: 0.5rem 1.5rem;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-secondary);
-    border-radius: var(--border-radius);
-    transition: all var(--transition-fast);
+.filter-btn {
+  padding: 0.5rem 1.125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-full);             // pill shape
+  transition:
+    background var(--t-normal),
+    color var(--t-normal),
+    border-color var(--t-normal);
 
-    &:hover, &.active {
-      background-color: var(--accent-color);
-      color: var(--bg-color);
-      border-color: var(--accent-color);
-    }
+  &:hover {
+    border-color: var(--black);
+    color: var(--black);
   }
+
+  &.active {
+    background: var(--black);
+    color: var(--white);
+    border-color: var(--black);
+  }
+}
+
+// ─── Grid spacing fix ─────────────────────────────────────────────────────────
+.products-grid-wrap {
+  margin-top: var(--sp-3);
 }

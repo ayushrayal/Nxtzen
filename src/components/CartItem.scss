@@ -1,100 +1,159 @@
 .cart-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 100px 1fr;
   gap: 1.5rem;
-  padding: 1rem;
+  padding: 1.25rem;
   margin-bottom: 1rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;          // Matches main card style
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;  // Stack on small screens
+    gap: 1rem;
+    padding: 1rem;
+  }
 }
 
 .cart-item-image {
-  width: 100px;
-  height: 120px;
+  width: 100%;
+  aspect-ratio: 4 / 5;          // Match product card ratio
   object-fit: cover;
-  border-radius: var(--border-radius);
+  object-position: center top;
+  background: var(--gray-100);
+  border-radius: 10px;
+  display: block;
+
+  @media (max-width: 600px) {
+    max-width: 120px;           // Don't let image become too huge when stacked
+  }
 }
 
 .cart-item-details {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.75rem;
 }
 
 .cart-item-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  gap: 1rem;
 
   h4 {
-    font-size: 1.1rem;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
     color: var(--text-primary);
   }
 
   .price {
+    font-size: 1rem;
     font-weight: 700;
-    color: var(--accent-color);
+    color: var(--text-primary);
+    white-space: nowrap;
   }
 }
 
 .cart-item-meta {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 8px;
+  font-weight: 500;
+}
 
-  .swatch {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid var(--border-color);
-  }
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .cart-item-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-top: auto;
 
-  .quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: var(--surface-color);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-
-    button {
-      color: var(--text-primary);
-      transition: color var(--transition-fast);
-
-      &:hover:not(:disabled) {
-        color: var(--accent-color);
-      }
-
-      &:disabled {
-        color: var(--border-color);
-      }
-    }
-  }
-
-  .remove-btn {
-    color: var(--text-secondary);
-    transition: color var(--transition-fast);
-
-    &:hover {
-      color: #ef4444; // Red for delete
-    }
+  @media (max-width: 600px) {
+    margin-top: 0.5rem;
   }
 }
-@media (max-width: 500px) {
-  .cart-item {
-    flex-direction: column;
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gray-50);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+
+  button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--t-fast);
+    box-shadow: var(--shadow-xs);
+
+    &:hover:not(:disabled) {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+    
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
   }
-  .cart-item-image {
-    width: 100%;
-    height: 200px;
+
+  span {
+    min-width: 32px;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+}
+
+.remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--gray-400);
+  background: transparent;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--t-fast);
+
+  &:hover {
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.05);
   }
 }

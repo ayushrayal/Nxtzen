@@ -1,88 +1,106 @@
 .cart-page {
-  padding-top: 8rem;
-  padding-bottom: 4rem;
+  padding-top: var(--page-top);
+  padding-bottom: var(--sp-16);
+
+  > .page-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--sp-6);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--border);
+  }
 }
 
-.page-title {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: var(--text-primary);
-}
-
+// ─── Empty State ──────────────────────────────────────────────────────────────
 .empty-cart {
-  padding: 4rem 2rem;
+  padding: var(--sp-12) var(--sp-6);
   text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-  }
-
-  p {
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
-  }
-}
-
-.cart-content {
+  border: 1px solid var(--border);
   display: flex;
-  gap: 3rem;
-  align-items: flex-start;
-}
-
-.cart-items-list {
-  flex: 2;
-}
-
-.cart-summary {
-  flex: 1;
-  padding: 2rem;
-  position: sticky;
-  top: 6rem;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
 
   h3 {
     font-size: 1.25rem;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
-  
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    color: var(--text-secondary);
 
-    &.total {
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: 1.25rem;
-      margin-top: 1rem;
-    }
+  p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    max-width: 340px;
+  }
+
+  .btn-primary {
+    margin-top: var(--sp-2);
+  }
+}
+
+// ─── Cart Layout ─────────────────────────────────────────────────────────────
+.cart-content {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--sp-6);
+  align-items: start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cart-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+// ─── Summary Panel ────────────────────────────────────────────────────────────
+.cart-summary {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--sp-3));
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: 16px;          // Matches card theme
+  background: var(--gray-50);
+
+  h3 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--border);
   }
 
   hr {
     border: none;
-    border-top: 1px solid var(--border-color);
-    margin: 1.5rem 0;
-  }
-
-  .checkout-btn {
-    width: 100%;
-    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+    margin: var(--sp-2) 0;
   }
 }
 
-@media (max-width: 900px) {
-  .cart-content {
-    flex-direction: column;
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-1) 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+
+  &.total {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--text-primary);
+    padding-top: var(--sp-2);
   }
-  .cart-summary {
-    width: 100%;
-    position: static;
-  }
+}
+
+.checkout-btn {
+  width: 100%;
+  margin-top: var(--sp-3);
 }

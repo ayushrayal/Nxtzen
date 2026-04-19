@@ -1,56 +1,54 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import './Landing.scss';
 
 const Landing = () => {
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(true);
+  const [phase, setPhase] = useState('in'); // 'in' | 'hold' | 'out'
 
   useEffect(() => {
-    // Start fade-out after 2s, then navigate after the animation completes (0.8s)
-    const fadeOutTimer = setTimeout(() => setVisible(false), 2000);
-    const navTimer = setTimeout(() => navigate('/home'), 2800);
-
-    return () => {
-      clearTimeout(fadeOutTimer);
-      clearTimeout(navTimer);
-    };
+    // Fade-in → hold → fade-out → navigate
+    // in: 0.7s  hold: 1.0s  out: 0.5s  total ≈ 2.2s
+    const holdTimer = setTimeout(() => setPhase('out'), 1700);
+    const navTimer  = setTimeout(() => navigate('/home'),  2200);
+    return () => { clearTimeout(holdTimer); clearTimeout(navTimer); };
   }, [navigate]);
 
   return (
-    <div className="landing-wrapper">
-      <AnimatePresence>
-        {visible && (
-          <motion.div
-            className="landing-container"
-            key="landing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
-          >
-            <motion.h1
-              className="landing-logo"
-              initial={{ opacity: 0, scale: 0.92, letterSpacing: '0.2em' }}
-              animate={{ opacity: 1, scale: 1, letterSpacing: '0.5em' }}
-              transition={{ duration: 1.4, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              NXTZEN
-            </motion.h1>
+    <motion.div
+      className="landing-screen"
+      animate={{ opacity: phase === 'out' ? 0 : 1 }}
+      transition={{ duration: phase === 'out' ? 0.5 : 0, ease: 'easeInOut' }}
+    >
+      {/* Brand wordmark */}
+      <motion.h1
+        className="landing-logo"
+        initial={{ opacity: 0, scale: 0.88, y: 12 }}
+        animate={{ opacity: 1, scale: 1,    y: 0  }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      >
+        NXTZEN
+      </motion.h1>
 
-            <motion.p
-              className="landing-tagline"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 0.4, y: 0 }}
-              transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
-            >
-              Redefine Your Reality.
-            </motion.p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      {/* Tagline */}
+      <motion.p
+        className="landing-tagline"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.35, ease: 'easeOut' }}
+      >
+        Minimal &nbsp;·&nbsp; Modern &nbsp;·&nbsp; Essential
+      </motion.p>
+
+      {/* Thin accent line */}
+      <motion.span
+        className="landing-line"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: 1, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </motion.div>
   );
 };
 

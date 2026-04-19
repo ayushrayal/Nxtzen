@@ -6,62 +6,61 @@ import './ProductCard.scss';
 const ProductCard = ({ product, index = 0 }) => {
   const availableColors = Object.keys(product.colors || {});
   const [activeColor, setActiveColor] = useState(availableColors[0]);
-  
-  const displayImage = product.colors[activeColor] ? product.colors[activeColor][0] : '';
+
+  const displayImage = product.colors[activeColor]?.[0] ?? '';
 
   return (
-    <motion.div 
+    <motion.div
       className="product-card"
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 32 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -6 }}
     >
-      <Link to={`/product/${product.id}`} className="product-image-container">
+      {/* Image */}
+      <Link to={`/product/${product.id}`} className="card-image-wrap">
         <AnimatePresence mode="wait">
-          <motion.img 
+          <motion.img
             key={displayImage}
-            src={displayImage} 
-            alt={product.name} 
-            className="product-image" 
-            loading="lazy" 
+            src={displayImage}
+            alt={product.name}
+            className="card-image"
+            loading="lazy"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           />
         </AnimatePresence>
-        <div className="product-overlay">
-          <span>View Details</span>
+
+        {/* Overlay */}
+        <div className="card-overlay">
+          <span className="card-overlay-label">View Product</span>
         </div>
       </Link>
-      
-      <div className="product-info">
-        <div className="product-header">
-          <h3 className="product-title">{product.name}</h3>
-          <span className="product-price">${product.price.toFixed(2)}</span>
+
+      {/* Info */}
+      <div className="card-info">
+        <div className="card-info-top">
+          <h3 className="card-name">{product.name}</h3>
+          <span className="card-price">${product.price.toFixed(2)}</span>
         </div>
-        <p className="product-desc">{product.description.substring(0, 60)}...</p>
-        
-        <div className="product-meta">
-          <div className="colors">
+
+        {/* Color swatches */}
+        {availableColors.length > 0 && (
+          <div className="card-swatches">
             {availableColors.map(color => (
-              <span 
-                key={color} 
+              <button
+                key={color}
                 className={`color-swatch ${activeColor === color ? 'active' : ''}`}
-                style={{ backgroundColor: color }} 
-                onClick={(e) => {
-                  e.preventDefault();
-                  setActiveColor(color);
-                }}
+                style={{ backgroundColor: color }}
+                onClick={e => { e.preventDefault(); setActiveColor(color); }}
+                aria-label={`Color: ${color}`}
+                title={color}
               />
             ))}
           </div>
-          <div className="sizes">
-            {product.sizes.map(size => (
-              <span key={size} className="size-badge">{size}</span>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
     </motion.div>
   );

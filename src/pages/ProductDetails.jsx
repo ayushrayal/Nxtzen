@@ -2,27 +2,27 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { getProductById } from '../utils/dataLoader';
-import { getStorageItem, setStorageItem, STORAGE_KEYS } from '../utils/storage';
-import CheckoutModal from '../components/CheckoutModal';
+import { useCart } from '../context/CartContext';
 import './ProductDetails.scss';
 
 const ProductDetails = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const product = getProductById(id);
+  const { id }     = useParams();
+  const navigate   = useNavigate();
+  const product    = getProductById(id);
+
+  const { addToCart, openDrawer, openCheckout } = useCart();
 
   const availableColors = product ? Object.keys(product.colors) : [];
-  
-  const [selectedColor, setSelectedColor] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
+
+  const [selectedColor,    setSelectedColor]    = useState('');
+  const [selectedSize,     setSelectedSize]     = useState('');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (product) {
-      const initialColor = Object.keys(product.colors)[0];
-      setSelectedColor(initialColor);
+      setSelectedColor(Object.keys(product.colors)[0]);
       setSelectedSize(product.sizes[0]);
       setActiveImageIndex(0);
     }
@@ -32,72 +32,46 @@ const ProductDetails = () => {
     return (
       <div className="container" style={{ paddingTop: '8rem', textAlign: 'center' }}>
         <h2>Product not found</h2>
-        <Link to="/products" className="btn-primary" style={{ marginTop: '1rem' }}>Back to Products</Link>
+        <Link to="/products" className="btn-primary" style={{ marginTop: '1.5rem' }}>
+          Back to Products
+        </Link>
       </div>
     );
   }
 
-  const currentImages = product.colors[selectedColor] || [];
-  const activeImage = currentImages[activeImageIndex] || '';
+  const currentImages  = product.colors[selectedColor] || [];
+  const activeImage    = currentImages[activeImageIndex] || '';
 
-  const handleColorChange = (color) => {
+  const handleColorChange = color => {
     setSelectedColor(color);
     setActiveImageIndex(0);
   };
 
-  const handleNextImage = () => {
-    setActiveImageIndex((prev) => (prev + 1) % currentImages.length);
-  };
+  const handleNext = () => setActiveImageIndex(p => (p + 1) % currentImages.length);
+  const handlePrev = () => setActiveImageIndex(p => (p - 1 + currentImages.length) % currentImages.length);
 
-  const handlePrevImage = () => {
-    setActiveImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
-  };
+  const buildCartItem = () => ({
+    ...product,
+    cartId:        `${product.id}-${selectedColor}-${selectedSize}`,
+    selectedColor,
+    selectedSize,
+    quantity:      1,
+    image:         activeImage,
+  });
 
   const handleAddToCart = () => {
-    const currentCart = getStorageItem(STORAGE_KEYS.CART, []);
-    const cartItem = {
-      ...product,
-      cartId: `${product.id}-${selectedColor}-${selectedSize}`,
-      selectedColor,
-      selectedSize,
-      quantity: 1,
-      image: activeImage // Store specific image in cart
-    };
-
-    const existingIndex = currentCart.findIndex(item => item.cartId === cartItem.cartId);
-    if (existingIndex >= 0) {
-      currentCart[existingIndex].quantity += 1;
-    } else {
-      currentCart.push(cartItem);
-    }
-    
-    setStorageItem(STORAGE_KEYS.CART, currentCart);
-    import('react-hot-toast').then(toast => toast.default.success(`${product.name} added to cart!`));
-    window.dispatchEvent(new Event('storage'));
+    addToCart(buildCartItem());
+    toast.success(`${product.name} added to cart!`);
+    openDrawer();
   };
 
   const handleBuyNow = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCheckoutSuccess = (orderData) => {
-    // Orders updated via Cart/Modal, but we format the item properly here first if needed
-    const orders = getStorageItem(STORAGE_KEYS.ORDERS, []);
-    orders.push({
-      id: Date.now(),
-      date: new Date().toISOString(),
-      items: [{...product, selectedColor, selectedSize, quantity: 1, image: activeImage}],
-      total: product.price,
-      shipping: orderData
-    });
-    setStorageItem(STORAGE_KEYS.ORDERS, orders);
-    setIsModalOpen(false);
-    import('react-hot-toast').then(toast => toast.default.success('Order placed successfully! Redirecting to profile...'));
-    navigate('/profile');
+    addToCart(buildCartItem());
+    openCheckout();
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="page-transition product-details-page"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -106,78 +80,82 @@ const ProductDetails = () => {
     >
       <div className="container">
         <button onClick={() => navigate(-1)} className="back-btn">
-          <ArrowLeft size={20} /> Back
+          <ArrowLeft size={18} />  Back
         </button>
 
         <div className="product-details-content">
+          {/* Gallery */}
           <div className="product-gallery-container">
             <AnimatePresence mode="wait">
-              <motion.img 
+              <motion.img
                 key={activeImage}
-                src={activeImage} 
-                alt={`${product.name} in ${selectedColor}`} 
+                src={activeImage}
+                alt={`${product.name} in ${selectedColor}`}
                 className="main-image"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0  }}
+                exit={{ opacity: 0, x: -16 }}
                 transition={{ duration: 0.3 }}
               />
             </AnimatePresence>
-            
+
             {currentImages.length > 1 && (
               <div className="gallery-controls">
-                <button onClick={handlePrevImage} className="gallery-btn"><ChevronLeft /></button>
-                <button onClick={handleNextImage} className="gallery-btn"><ChevronRight /></button>
+                <button onClick={handlePrev} className="gallery-btn"><ChevronLeft /></button>
+                <button onClick={handleNext} className="gallery-btn"><ChevronRight /></button>
               </div>
             )}
-            
+
             {currentImages.length > 1 && (
               <div className="gallery-thumbnails">
                 {currentImages.map((img, idx) => (
-                  <button 
-                    key={idx} 
+                  <motion.button
+                    key={idx}
                     className={`thumb-btn ${activeImageIndex === idx ? 'active' : ''}`}
                     onClick={() => setActiveImageIndex(idx)}
+                    whileHover={{ scale: 1.03 }}
                   >
                     <img src={img} alt="thumbnail" />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}
           </div>
 
-          <motion.div 
+          {/* Info */}
+          <motion.div
             className="product-info-block"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0  }}
+            transition={{ duration: 0.6, delay: 0.18 }}
           >
             <h1 className="title">{product.name}</h1>
             <p className="price">${product.price.toFixed(2)}</p>
             <p className="description">{product.description}</p>
 
+            {/* Color selector */}
             <div className="options-group">
-              <h4>Color</h4>
-              <div className="color-text-display">{selectedColor}</div>
+              <h4>Color — <span style={{ fontWeight: 400, textTransform: 'capitalize' }}>{selectedColor}</span></h4>
               <div className="color-selector">
                 {availableColors.map(color => (
-                  <button 
+                  <button
                     key={color}
                     className={`color-btn ${selectedColor === color ? 'selected' : ''}`}
                     style={{ backgroundColor: color }}
                     onClick={() => handleColorChange(color)}
-                    aria-label={`Select color ${color}`}
+                    aria-label={`Color: ${color}`}
                     title={color}
                   />
                 ))}
               </div>
             </div>
 
+            {/* Size selector */}
             <div className="options-group">
               <h4>Size</h4>
               <div className="size-selector">
                 {product.sizes.map(size => (
-                  <button 
+                  <button
                     key={size}
                     className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
                     onClick={() => setSelectedSize(size)}
@@ -188,6 +166,7 @@ const ProductDetails = () => {
               </div>
             </div>
 
+            {/* Actions */}
             <div className="action-buttons">
               <button className="btn-secondary add-to-cart-btn" onClick={handleAddToCart}>
                 Add to Cart
@@ -199,14 +178,6 @@ const ProductDetails = () => {
           </motion.div>
         </div>
       </div>
-
-      {isModalOpen && (
-        <CheckoutModal 
-          onClose={() => setIsModalOpen(false)} 
-          onSuccess={handleCheckoutSuccess} 
-          directProduct={{...product, selectedColor, selectedSize, quantity: 1, image: activeImage}}
-        />
-      )}
     </motion.div>
   );
 };

@@ -1,100 +1,137 @@
+// ─── Page wrapper ─────────────────────────────────────────────────────────────
 .profile-page {
-  padding-top: 8rem;
-  padding-bottom: 4rem;
+  // padding-inline comes from .container on the same element
+  // padding-top clears the fixed navbar — works now that .container
+  // uses padding-inline instead of the shorthand padding: 0 ...
+  padding-top: var(--page-top);
+  padding-bottom: var(--sp-16);
+
+  > .page-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--sp-6);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--border);
+  }
 }
 
+// ─── 2-column grid ───────────────────────────────────────────────────────────
 .profile-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: 2rem;
   align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.profile-info, .profile-orders {
-  padding: 2rem;
+// ─── Panel cards ─────────────────────────────────────────────────────────────
+.profile-info,
+.profile-orders {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);    // 12px — matches request
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
 }
 
 .profile-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--border);
 
   h2 {
-    font-size: 1.5rem;
-    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 }
 
 .profile-form {
-  .input-group {
-    input[disabled], textarea[disabled] {
-      opacity: 0.7;
-      background-color: transparent;
-      border-color: transparent;
-      padding-left: 0;
-      color: var(--text-primary);
-    }
+  > .btn-primary {
+    width: 100%;
+    margin-top: var(--sp-2);
+  }
+}
+
+// ─── Orders ───────────────────────────────────────────────────────────────────
+.no-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 0;
+  color: var(--gray-300);
+  text-align: center;
+
+  p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
   }
 }
 
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0;
 }
 
 .order-card {
-  padding: 1.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  background: var(--surface-color);
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border);
 
-  .order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-
-    .order-date {
-      display: block;
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-    }
-
-    .order-id {
-      color: var(--text-primary);
-      font-size: 0.75rem;
-      font-family: monospace;
-      opacity: 0.5;
-    }
-
-    .order-total {
-      font-weight: 700;
-      color: var(--accent-color);
-    }
-  }
-
-  .order-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-
-    .order-item-chip {
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-  }
+  &:last-child { border-bottom: none; }
 }
 
-@media (max-width: 768px) {
-  .profile-layout {
-    grid-template-columns: 1fr;
-  }
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.order-date {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.order-id {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: block;
+}
+
+.order-total {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.order-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.order-item-chip {
+  display: inline-flex;
+  padding: 3px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
 }

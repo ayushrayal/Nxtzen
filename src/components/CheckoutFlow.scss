@@ -1,0 +1,326 @@
+// ─── Backdrop ─────────────────────────────────────────────────────────────────
+.cf-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+// ─── Panel ────────────────────────────────────────────────────────────────────
+.cf-panel {
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.22);
+}
+
+// ─── Header ───────────────────────────────────────────────────────────────────
+.cf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+// ─── Step bar ─────────────────────────────────────────────────────────────────
+.cf-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.cf-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cf-step-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border-strong);
+  background: var(--white);
+  color: var(--text-muted);
+  font-size: 0.625rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--t-normal), border-color var(--t-normal), color var(--t-normal);
+
+  .cf-step.active & {
+    border-color: var(--black);
+    color: var(--black);
+  }
+
+  .cf-step.done & {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+}
+
+.cf-step-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color var(--t-normal);
+  white-space: nowrap;
+
+  .cf-step.active & { color: var(--black); }
+
+  @media (max-width: 420px) { display: none; }
+}
+
+.cf-step-line {
+  width: 28px;
+  height: 1px;
+  background: var(--border-strong);
+  margin: 0 0.5rem;
+  flex-shrink: 0;
+  transition: background var(--t-normal);
+
+  &.done { background: var(--black); }
+}
+
+.cf-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: background var(--t-fast), color var(--t-fast);
+
+  &:hover {
+    background: var(--gray-100);
+    color: var(--black);
+  }
+}
+
+// ─── Body / scroll area ───────────────────────────────────────────────────────
+.cf-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.cf-step-content {
+  padding: 2rem 1.75rem;
+}
+
+.cf-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.375rem;
+}
+
+.cf-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.75rem;
+}
+
+// ─── Form grid ────────────────────────────────────────────────────────────────
+.cf-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1.5rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-full {
+    grid-column: 1 / -1;
+  }
+}
+
+// ─── Shipping summary ─────────────────────────────────────────────────────────
+.cf-ship-info {
+  padding: 1rem;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.cf-ship-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.cf-ship-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.cf-ship-addr {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+// ─── Item list ────────────────────────────────────────────────────────────────
+.cf-items {
+  border-top: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.cf-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cf-item-img {
+  width: 64px;
+  height: 80px;
+  object-fit: cover;
+  object-position: center top;
+  background: var(--gray-100);
+  display: block;
+}
+
+.cf-item-info {
+  min-width: 0;
+
+  h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: capitalize;
+  }
+}
+
+.cf-item-price {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+// ─── Totals ───────────────────────────────────────────────────────────────────
+.cf-totals {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.cf-total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.375rem 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+
+  &.grand {
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--text-primary);
+  }
+}
+
+// ─── Confirmation ─────────────────────────────────────────────────────────────
+.cf-confirm {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cf-confirm-icon {
+  color: var(--black);
+  margin-bottom: 1rem;
+}
+
+.cf-confirm-details {
+  width: 100%;
+  max-width: 340px;
+  border: 1px solid var(--border);
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.cf-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--border);
+
+  &:last-child { border-bottom: none; }
+
+  span:first-child {
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  span:last-child {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}
+
+// ─── Footer nav ───────────────────────────────────────────────────────────────
+.cf-footer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.cf-back { flex-shrink: 0; padding: 0.875rem 1.25rem; }
+.cf-next { flex: 1; gap: 0.5rem; }
+
+// ─── Spinner ──────────────────────────────────────────────────────────────────
+.cf-spin {
+  animation: cf-spin 1s linear infinite;
+}
+
+@keyframes cf-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
