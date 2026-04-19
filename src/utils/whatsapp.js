@@ -8,7 +8,7 @@ export const generateWhatsAppLink = (orderDetails) => {
   const message = `New Order Received\n\nOrder ID: #${id || Date.now()}\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\nProducts:\n${productList}\n\nTotal: ₹${Number(total).toFixed(2)}\n\nPlease confirm this order.`;
 
   const encodedMessage = encodeURIComponent(message);
-  return `https://wa.me/917252848020?text=${encodedMessage}`;
+  return `https://wa.me/917251848020?text=${encodedMessage}`;
 };
 
 export const redirectToWhatsApp = (waLink) => {
