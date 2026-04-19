@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 import { sendOrderEmail } from '../services/emailService';
 import { getStorageItem, setStorageItem, STORAGE_KEYS } from '../utils/storage';
+import { generateWhatsAppLink, redirectToWhatsApp } from '../utils/whatsapp';
 import './CheckoutFlow.scss';
 
 // ─── Step slide animation ─────────────────────────────────────────────────────
@@ -81,13 +82,15 @@ const CheckoutFlow = () => {
           items: cartItems, directProduct: null,
         };
 
-        const productList = cartItems.map(item => `- ${item.name} (Qty: ${item.quantity})`).join('\n');
-        const message = `New Order Received\n\nOrder ID: #${id}\n\nName: ${form.name.trim()}\nPhone: ${form.phone.trim()}\nAddress: ${form.address.trim()}\n\nProducts:\n${productList}\n\nTotal: ₹${cartTotal.toFixed(2)}\n\nPlease confirm this order.`;
-        
-        const encodedMessage = encodeURIComponent(message);
-        const generatedWaLink = `https://wa.me/917252848020?text=${encodedMessage}`;
-        
-        setWaLink(generatedWaLink);
+        const waLink = generateWhatsAppLink({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          address: form.address.trim(),
+          items: cartItems,
+          total: cartTotal,
+          id
+        });
+        setWaLink(waLink);
 
         // Persist order
         const orders = getStorageItem(STORAGE_KEYS.ORDERS, []);
@@ -108,9 +111,9 @@ const CheckoutFlow = () => {
         setOrderId(id);
         
         toast.success("Order placed! Redirecting to WhatsApp...", { duration: 3000 });
-        
+
         setTimeout(() => {
-          window.location.href = generatedWaLink;
+          redirectToWhatsApp(waLink);
         }, 1500);
 
         setDirection(1);
@@ -353,7 +356,7 @@ const StepConfirmed = ({ orderId, form, total, waLink, onDone }) => (
       <motion.button
         className="btn-primary"
         style={{ flex: 1, backgroundColor: '#25D366', borderColor: '#25D366', color: '#fff' }}
-        onClick={() => window.location.href = waLink}
+        onClick={() => redirectToWhatsApp(waLink)}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
