@@ -33,6 +33,7 @@ const CheckoutFlow = () => {
   const [direction, setDirection] = useState(1);
   const [loading,   setLoading]   = useState(false);
   const [orderId,   setOrderId]   = useState(null);
+  const [waLink,    setWaLink]    = useState('');
   const [errors,    setErrors]    = useState({});
 
   const [form, setForm] = useState({
@@ -80,8 +81,13 @@ const CheckoutFlow = () => {
           items: cartItems, directProduct: null,
         };
 
-        // Send email (non-blocking — failure doesn't abort order)
-        sendOrderEmail(payload).catch(err => console.warn('[Checkout] Email failed:', err));
+        const productList = cartItems.map(item => `- ${item.name} (Qty: ${item.quantity})`).join('\n');
+        const message = `New Order Received\n\nOrder ID: #${id}\n\nName: ${form.name.trim()}\nPhone: ${form.phone.trim()}\nAddress: ${form.address.trim()}\n\nProducts:\n${productList}\n\nTotal: ₹${cartTotal.toFixed(2)}\n\nPlease confirm this order.`;
+        
+        const encodedMessage = encodeURIComponent(message);
+        const generatedWaLink = `https://wa.me/917252848020?text=${encodedMessage}`;
+        
+        setWaLink(generatedWaLink);
 
         // Persist order
         const orders = getStorageItem(STORAGE_KEYS.ORDERS, []);
@@ -100,6 +106,13 @@ const CheckoutFlow = () => {
         // Clear cart
         clearCart();
         setOrderId(id);
+        
+        toast.success("Order placed! Redirecting to WhatsApp...", { duration: 3000 });
+        
+        setTimeout(() => {
+          window.location.href = generatedWaLink;
+        }, 1500);
+
         setDirection(1);
         setStep(2);
       } catch (err) {
@@ -176,6 +189,7 @@ const CheckoutFlow = () => {
                       orderId={orderId}
                       form={form}
                       total={cartTotal}
+                      waLink={waLink}
                       onDone={handleClose}
                     />
                   )}
@@ -288,7 +302,7 @@ const StepSummary = ({ items, total, form }) => (
 );
 
 // ─── Step 3: Confirmed ────────────────────────────────────────────────────────
-const StepConfirmed = ({ orderId, form, total, onDone }) => (
+const StepConfirmed = ({ orderId, form, total, waLink, onDone }) => (
   <div className="cf-step-content cf-confirm">
     <motion.div
       className="cf-confirm-icon"
@@ -325,16 +339,28 @@ const StepConfirmed = ({ orderId, form, total, onDone }) => (
       ))}
     </motion.div>
 
-    <motion.button
-      className="btn-primary"
-      style={{ width: '100%', marginTop: '1.5rem' }}
-      onClick={onDone}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5 }}
-    >
-      Continue Shopping
-    </motion.button>
+    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+      <motion.button
+        className="btn-secondary"
+        style={{ flex: 1 }}
+        onClick={onDone}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        Close
+      </motion.button>
+      <motion.button
+        className="btn-primary"
+        style={{ flex: 1, backgroundColor: '#25D366', borderColor: '#25D366', color: '#fff' }}
+        onClick={() => window.location.href = waLink}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        Confirm on WhatsApp
+      </motion.button>
+    </div>
   </div>
 );
 
