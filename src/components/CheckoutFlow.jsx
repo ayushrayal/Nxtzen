@@ -77,10 +77,18 @@ const CheckoutFlow = () => {
       try {
         const id      = Date.now();
         const payload = {
+          id,
           name: form.name.trim(), email: form.email.trim(),
           phone: form.phone.trim(), address: form.address.trim(),
           items: cartItems, directProduct: null,
+          total: cartTotal,
         };
+
+        // Send Email via EmailJS
+        const emailSent = await sendOrderEmail(payload);
+        if (!emailSent) {
+          console.warn('[Checkout] Email failed to send, but proceeding with order placement.');
+        }
 
         const waLink = generateWhatsAppLink({
           name: form.name.trim(),
@@ -110,7 +118,7 @@ const CheckoutFlow = () => {
         clearCart();
         setOrderId(id);
         
-        toast.success("Order placed! Redirecting to WhatsApp...", { duration: 3000 });
+        toast.success("Order placed! Handing off to WhatsApp...", { duration: 3000 });
 
         setTimeout(() => {
           redirectToWhatsApp(waLink);

@@ -71,11 +71,13 @@ export const sendOrderEmail = async (orderData) => {
 
   // ✅ These keys MUST match your EmailJS template variables EXACTLY
   const templateParams = {
-    name:    String(orderData.name).trim(),
-    email:   String(orderData.email).trim(),
-    phone:   String(orderData.phone).trim(),
-    address: String(orderData.address).trim(),
-    product: productString,
+    order_id: String(orderData.id),
+    name:     String(orderData.name).trim(),
+    email:    String(orderData.email).trim(),
+    phone:    String(orderData.phone).trim(),
+    address:  String(orderData.address).trim(),
+    product:  productString,
+    total:    `₹${Number(orderData.total).toFixed(2)}`,
     reply_to: 'nxtzen.co@gmail.com',
   };
 
